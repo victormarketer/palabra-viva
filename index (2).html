@@ -419,6 +419,60 @@
     }
     .error-box.visible { display: block; }
 
+    /* ── API Key box ── */
+    .apikey-bar {
+      position: relative;
+      z-index: 10;
+      background: rgba(253,243,220,0.8);
+      border-bottom: 1px solid rgba(200,146,42,0.25);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .apikey-bar label {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #7a6a50;
+      margin: 0;
+    }
+    .apikey-bar input {
+      flex: 1;
+      min-width: 220px;
+      max-width: 380px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.85rem;
+      border: 1px solid rgba(200,146,42,0.35);
+      border-radius: 4px;
+      background: #fff;
+      color: var(--ink);
+      font-family: monospace;
+    }
+    .apikey-bar .btn-save {
+      padding: 0.5rem 1.2rem;
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: background 0.2s;
+    }
+    .apikey-bar .btn-save:hover { background: #b07820; }
+    .apikey-status {
+      font-size: 0.78rem;
+      color: var(--sage);
+      font-weight: 500;
+    }
+    .apikey-status.error { color: var(--rust); }
+
     /* ── Footer ── */
     footer {
       text-align: center;
@@ -437,6 +491,14 @@
   <h1>Palabra <span>Viva</span></h1>
   <p>Estudia · Predica · Devociona</p>
 </header>
+
+<!-- API Key Bar -->
+<div class="apikey-bar">
+  <label>🔑 Tu API Key de Anthropic:</label>
+  <input type="password" id="apikey-input" placeholder="sk-ant-..." />
+  <button class="btn-save" onclick="guardarKey()">Guardar</button>
+  <span class="apikey-status" id="apikey-status"></span>
+</div>
 
 <nav>
   <button class="tab-btn active" onclick="switchTab('estudio')">
@@ -727,11 +789,40 @@
       .map(t => t.textContent.trim());
   }
 
+  // ── API Key management ──
+  let API_KEY = sessionStorage.getItem('pw_apikey') || '';
+
+  window.addEventListener('load', () => {
+    if (API_KEY) {
+      document.getElementById('apikey-input').value = API_KEY;
+      document.getElementById('apikey-status').textContent = '✅ API Key guardada';
+    }
+  });
+
+  function guardarKey() {
+    const val = document.getElementById('apikey-input').value.trim();
+    if (!val.startsWith('sk-ant-')) {
+      document.getElementById('apikey-status').textContent = '⚠️ La key debe empezar con sk-ant-';
+      document.getElementById('apikey-status').className = 'apikey-status error';
+      return;
+    }
+    API_KEY = val;
+    sessionStorage.setItem('pw_apikey', val);
+    document.getElementById('apikey-status').textContent = '✅ Guardada — ya podés usar la app';
+    document.getElementById('apikey-status').className = 'apikey-status';
+  }
+
   // ── API call ──
   async function callClaude(prompt) {
+    if (!API_KEY) throw new Error('Falta la API Key');
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 1000,
@@ -814,7 +905,7 @@ Responde en español, de forma clara, cálida y edificante. Usa formato con tít
       box.scrollIntoView({ behavior: 'smooth' });
     } catch (e) {
       const err = document.getElementById('error-estudio');
-      err.textContent = '⚠️ No se pudo conectar con la IA. Verifica tu conexión o intenta más tarde.';
+      err.textContent = '⚠️ No se pudo conectar. Verificá que tu API Key esté guardada correctamente arriba.';
       err.classList.add('visible');
     } finally {
       document.getElementById('btn-estudio').innerHTML = '<span>✦</span> Generar lección';
