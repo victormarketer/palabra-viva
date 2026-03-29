@@ -28,7 +28,6 @@
       overflow-x: hidden;
     }
 
-    /* ── Background texture ── */
     body::before {
       content: '';
       position: fixed;
@@ -41,7 +40,6 @@
       z-index: 0;
     }
 
-    /* ── Header ── */
     header {
       position: relative;
       z-index: 10;
@@ -81,7 +79,6 @@
       text-transform: uppercase;
     }
 
-    /* ── Nav tabs ── */
     nav {
       position: relative;
       z-index: 10;
@@ -125,7 +122,6 @@
 
     .tab-btn .icon { margin-right: 0.5rem; font-size: 1rem; }
 
-    /* ── Main panel ── */
     main {
       position: relative;
       z-index: 5;
@@ -145,7 +141,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── Card ── */
     .card {
       background: rgba(255,255,255,0.6);
       border: 1px solid rgba(200,146,42,0.2);
@@ -172,7 +167,6 @@
       line-height: 1.5;
     }
 
-    /* ── Form elements ── */
     label {
       display: block;
       font-size: 0.78rem;
@@ -208,7 +202,6 @@
       line-height: 1.6;
     }
 
-    /* ── Button ── */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -256,7 +249,6 @@
       transform: translateY(-1px);
     }
 
-    /* ── Output box ── */
     .output-box {
       margin-top: 1.5rem;
       padding: 1.5rem;
@@ -295,7 +287,6 @@
     .output-box ul { padding-left: 1.2rem; margin-top: 0.5rem; }
     .output-box ul li { margin-bottom: 0.4rem; }
 
-    /* ── Loading spinner ── */
     .spinner {
       display: inline-block;
       width: 16px;
@@ -307,7 +298,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Bible study plan grid ── */
     .plan-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -341,40 +331,6 @@
     }
     .plan-card p { font-size: 0.78rem; color: #8a7a60; margin-top: 0.25rem; }
 
-    /* ── Progress bar ── */
-    .progress-wrap {
-      margin-top: 0.75rem;
-      background: var(--mist);
-      border-radius: 20px;
-      height: 6px;
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--gold-light));
-      border-radius: 20px;
-      transition: width 0.5s ease;
-    }
-
-    /* ── Divider ── */
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin: 1.5rem 0;
-      color: #c8b08a;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: rgba(200,146,42,0.25);
-    }
-
-    /* ── Tag chips ── */
     .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
     .tag {
       padding: 0.25rem 0.75rem;
@@ -388,25 +344,6 @@
     }
     .tag:hover { background: var(--gold); color: #fff; }
 
-    /* ── Sermon structure ── */
-    .sermon-section {
-      border-left: 3px solid var(--gold);
-      padding: 0.75rem 1rem;
-      margin: 0.75rem 0;
-      background: rgba(200,146,42,0.04);
-      border-radius: 0 4px 4px 0;
-    }
-    .sermon-section h4 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--rust);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 0.35rem;
-    }
-
-    /* ── Error ── */
     .error-box {
       margin-top: 1rem;
       padding: 0.85rem 1rem;
@@ -416,10 +353,11 @@
       font-size: 0.85rem;
       color: var(--rust);
       display: none;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
     .error-box.visible { display: block; }
 
-    /* ── Footer ── */
     footer {
       text-align: center;
       padding: 2rem;
@@ -439,24 +377,19 @@
 </header>
 
 <nav>
-  <button class="tab-btn active" onclick="switchTab('estudio')">
+  <button class="tab-btn active" onclick="switchTab('estudio', event)">
     <span class="icon">📖</span> Estudio Bíblico
   </button>
-  <button class="tab-btn" onclick="switchTab('sermon')">
+  <button class="tab-btn" onclick="switchTab('sermon', event)">
     <span class="icon">✝️</span> Crear Sermón
   </button>
-  <button class="tab-btn" onclick="switchTab('devocional')">
+  <button class="tab-btn" onclick="switchTab('devocional', event)">
     <span class="icon">🙏</span> Devocional
   </button>
 </nav>
 
 <main>
-
-  <!-- ══════════════════════════════════════════
-       PANEL 1 — ESTUDIO BÍBLICO
-  ══════════════════════════════════════════ -->
   <div class="panel active" id="panel-estudio">
-
     <div class="card">
       <div class="card-title">Elige tu <em>plan de estudio</em></div>
       <div class="card-sub">Comienza con un libro, un tema o un personaje bíblico. La IA te guiará paso a paso.</div>
@@ -537,10 +470,6 @@
     <div class="error-box" id="error-estudio"></div>
   </div>
 
-
-  <!-- ══════════════════════════════════════════
-       PANEL 2 — SERMÓN
-  ══════════════════════════════════════════ -->
   <div class="panel" id="panel-sermon">
     <div class="card">
       <div class="card-title">Crea tu <em>Sermón</em></div>
@@ -592,10 +521,6 @@
     <div class="error-box" id="error-sermon"></div>
   </div>
 
-
-  <!-- ══════════════════════════════════════════
-       PANEL 3 — DEVOCIONAL
-  ══════════════════════════════════════════ -->
   <div class="panel" id="panel-devocional">
     <div class="card">
       <div class="card-title">Tu <em>Devocional</em> de hoy</div>
@@ -636,7 +561,6 @@
     <div class="output-box" id="output-devocional"></div>
     <div class="error-box" id="error-devocional"></div>
   </div>
-
 </main>
 
 <footer>
@@ -644,15 +568,15 @@
 </footer>
 
 <script>
-  // ── Tab switching ──
-  function switchTab(name) {
+  function switchTab(name, evt) {
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('panel-' + name).classList.add('active');
-    event.currentTarget.classList.add('active');
+    if (evt && evt.currentTarget) {
+      evt.currentTarget.classList.add('active');
+    }
   }
 
-  // ── Study plan selection ──
   let currentPlan = 'libro';
 
   const planConfig = {
@@ -687,9 +611,6 @@
     document.getElementById('estudio-form-title').innerHTML = cfg.title;
     document.getElementById('input-label-1').textContent = cfg.label;
 
-    const container = document.getElementById('input-select-1').parentElement;
-
-    // Remove old dynamic input if any
     const old = document.getElementById('dynamic-input');
     if (old) old.remove();
 
@@ -714,7 +635,6 @@
     document.getElementById('error-estudio').classList.remove('visible');
   }
 
-  // ── Tag toggle ──
   function toggleTag(el) {
     el.style.background = el.style.background === 'rgb(200, 146, 42)' ? '' : '#c8922a';
     el.style.color = el.style.color === 'rgb(255, 255, 255)' ? '' : '#fff';
@@ -727,31 +647,37 @@
       .map(t => t.textContent.trim());
   }
 
-  // ── API call — usa el servidor, la key está oculta ──
   async function callClaude(prompt) {
     const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt })
     });
-    if (!response.ok) throw new Error('Error en el servidor: ' + response.status);
-    const data = await response.json();
-    if (data.error) throw new Error(data.error);
-    return data.result;
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || `Error en el servidor: ${response.status}`);
+    }
+
+    if (data.error) {
+      throw new Error(data.error);
+    }
+
+    return data.result || '';
   }
 
-  // ── Set button loading ──
-  function setLoading(btnId, loading) {
+  function setLoading(btnId, loading, defaultHtml) {
     const btn = document.getElementById(btnId);
     if (loading) {
       btn.disabled = true;
       btn.innerHTML = '<span class="spinner"></span> Generando...';
     } else {
       btn.disabled = false;
+      btn.innerHTML = defaultHtml;
     }
   }
 
-  // ── Format markdown-ish text to HTML ──
   function formatOutput(text) {
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -764,26 +690,34 @@
       .replace(/^(?!<)(.+)$/gm, '<p>$1</p>');
   }
 
-  // ════════════════════════════════════════
-  // GENERAR ESTUDIO
-  // ════════════════════════════════════════
   async function generarEstudio() {
     const plan = currentPlan;
     let inputVal = '';
 
     if (plan === 'libro') {
       inputVal = document.getElementById('input-select-1').value;
-      if (!inputVal) { alert('Por favor selecciona un libro.'); return; }
+      if (!inputVal) {
+        alert('Por favor selecciona un libro.');
+        return;
+      }
     } else {
       const dynInp = document.getElementById('dynamic-input');
       inputVal = dynInp ? dynInp.value.trim() : '';
-      if (!inputVal) { alert('Por favor completa el campo.'); return; }
+      if (!inputVal) {
+        alert('Por favor completa el campo.');
+        return;
+      }
     }
 
     const nivel = document.getElementById('nivel-estudio').value;
     const enfoque = document.getElementById('enfoque-estudio').value.trim();
 
-    const planLabels = { libro: 'el libro de', tema: 'el tema', personaje: 'el personaje bíblico', versiculo: 'el versículo o pasaje' };
+    const planLabels = {
+      libro: 'el libro de',
+      tema: 'el tema',
+      personaje: 'el personaje bíblico',
+      versiculo: 'el versículo o pasaje'
+    };
 
     const prompt = `Eres un profesor de Biblia experto y apasionado. Crea una lección bíblica completa sobre ${planLabels[plan]} "${inputVal}" para un estudiante de nivel ${nivel}.
 
@@ -811,17 +745,13 @@ Responde en español, de forma clara, cálida y edificante. Usa formato con tít
       box.scrollIntoView({ behavior: 'smooth' });
     } catch (e) {
       const err = document.getElementById('error-estudio');
-      err.textContent = '⚠️ No se pudo conectar. Verificá que tu API Key esté guardada correctamente arriba.';
+      err.textContent = '⚠️ ' + (e.message || 'Error desconocido');
       err.classList.add('visible');
     } finally {
-      document.getElementById('btn-estudio').innerHTML = '<span>✦</span> Generar lección';
-      setLoading('btn-estudio', false);
+      setLoading('btn-estudio', false, '<span>✦</span> Generar lección');
     }
   }
 
-  // ════════════════════════════════════════
-  // GENERAR SERMÓN
-  // ════════════════════════════════════════
   async function generarSermon() {
     const pasaje = document.getElementById('sermon-pasaje').value.trim();
     const tema = document.getElementById('sermon-tema').value.trim();
@@ -830,7 +760,10 @@ Responde en español, de forma clara, cálida y edificante. Usa formato con tít
     const notas = document.getElementById('sermon-notas').value.trim();
     const estilos = getSelectedTags();
 
-    if (!pasaje) { alert('Por favor ingresa un pasaje bíblico.'); return; }
+    if (!pasaje) {
+      alert('Por favor ingresa un pasaje bíblico.');
+      return;
+    }
 
     const audienciaLabels = {
       'iglesia-general': 'congregación general',
@@ -853,7 +786,7 @@ Estructura el sermón con estas secciones marcadas con ##:
 ## Texto Base
 ## Introducción (gancho poderoso)
 ## Punto 1 — [título]
-## Punto 2 — [título]  
+## Punto 2 — [título]
 ## Punto 3 — [título]
 ## Ilustración
 ## Aplicación Práctica
@@ -874,17 +807,13 @@ Que sea poderoso, bíblico, práctico y adecuado para ${audienciaLabels[audienci
       box.scrollIntoView({ behavior: 'smooth' });
     } catch (e) {
       const err = document.getElementById('error-sermon');
-      err.textContent = '⚠️ No se pudo conectar con la IA. Verifica tu conexión o intenta más tarde.';
+      err.textContent = '⚠️ ' + (e.message || 'Error desconocido');
       err.classList.add('visible');
     } finally {
-      document.getElementById('btn-sermon').innerHTML = '<span>✦</span> Generar sermón completo';
-      setLoading('btn-sermon', false);
+      setLoading('btn-sermon', false, '<span>✦</span> Generar sermón completo');
     }
   }
 
-  // ════════════════════════════════════════
-  // GENERAR DEVOCIONAL
-  // ════════════════════════════════════════
   async function generarDevocional() {
     const tema = document.getElementById('devocional-tema').value.trim();
     const versiculo = document.getElementById('devocional-versiculo').value.trim();
@@ -927,11 +856,10 @@ Sé cálido, esperanzador y profundamente bíblico. En español.`;
       box.scrollIntoView({ behavior: 'smooth' });
     } catch (e) {
       const err = document.getElementById('error-devocional');
-      err.textContent = '⚠️ No se pudo conectar con la IA. Verifica tu conexión o intenta más tarde.';
+      err.textContent = '⚠️ ' + (e.message || 'Error desconocido');
       err.classList.add('visible');
     } finally {
-      document.getElementById('btn-devocional').innerHTML = '<span>✦</span> Generar mi devocional';
-      setLoading('btn-devocional', false);
+      setLoading('btn-devocional', false, '<span>✦</span> Generar mi devocional');
     }
   }
 </script>
